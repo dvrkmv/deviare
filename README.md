@@ -10,3 +10,7 @@ URL Shortener built using Node, Express, Mongo and Angular. Mainly as a learning
 
 * Setup click count
 
+------
+
+License:
+MIT - http://lpg.mit-license.org/
