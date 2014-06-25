@@ -14,14 +14,20 @@ var gulp = require('gulp'),
     notify = require('gulp-notify'),
     livereload = require('gulp-livereload');
 
+gulp.task('html', function() {
+  return gulp.src('public/*.html')
+    .pipe(gulp.dest('dist'))
+    .pipe(notify({ message: 'HTML task complete' }));
+});
+
 gulp.task('styles', function() {
   return gulp.src('public/scss/main.scss')
     .pipe(sass({ style: 'expanded' }))
     .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-    .pipe(gulp.dest('dist/assets/css'))
+    .pipe(gulp.dest('dist/source/css'))
     .pipe(rename({suffix: '.min'}))
     .pipe(minifycss())
-    .pipe(gulp.dest('dist/assets/css'))
+    .pipe(gulp.dest('dist/css'))
     .pipe(notify({ message: 'Styles task complete' }));
 });
 
@@ -31,27 +37,27 @@ gulp.task('scripts', function() {
     .pipe(jshint.reporter('default'))
     .pipe(ngmin({dynamic: true}))
     .pipe(concat('core.js'))
-    .pipe(gulp.dest('dist/assets/js'))
+    .pipe(gulp.dest('dist/source/js'))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
-    .pipe(gulp.dest('dist/assets/js'))
+    .pipe(gulp.dest('dist/js'))
     .pipe(notify({ message: 'Scripts task complete' }));
 });
 
 gulp.task('images', function() {
   return gulp.src('public/img/**/*')
     .pipe(cache(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true })))
-    .pipe(gulp.dest('dist/assets/img'))
+    .pipe(gulp.dest('dist/img'))
     .pipe(notify({ message: 'Images task complete' }));
 });
 
 gulp.task('clean', function() {
-  return gulp.src(['dist/assets/css', 'dist/assets/js', 'dist/assets/img'], {read: false})
+  return gulp.src(['dist/css', 'dist/js', 'dist/img', 'dist'], {read: false})
     .pipe(clean());
 });
 
 gulp.task('default', ['clean'], function() {
-    gulp.start('styles', 'scripts', 'images');
+    gulp.start('html', 'styles', 'scripts', 'images');
 });
 
 gulp.task('watch', function() {

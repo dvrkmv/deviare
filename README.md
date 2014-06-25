@@ -10,7 +10,13 @@ URL Shortener built using Node, Express, Mongo and Angular. Mainly as a learning
 
 * Setup click count
 
-------
+-----
+
+### Why deviare? 
+
+It is Italian for: ```to deflect, to divert, to lead astray, to ward off```
+
+-----
 
 License:
 MIT - http://lpg.mit-license.org/
