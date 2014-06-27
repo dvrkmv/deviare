@@ -109,7 +109,7 @@ module.exports = function(app) {
 	app.delete('/api/redirects/:redir_url', function(req, res) {
 		Redirect.remove({
 			longUrl : req.params.redir_url
-		}, function(err, todo) {
+		}, function(err, redirect) {
 			if (err) {
 				res.send(err);
 			}
@@ -129,7 +129,7 @@ module.exports = function(app) {
 	});
 
 	app.get('/add', function(req, res) {
-		res.sendfile('../public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+		res.sendfile('/public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
 	});
 
 	app.get('*', function(req, res) {
