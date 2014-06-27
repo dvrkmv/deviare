@@ -1,7 +1,7 @@
 // set up ======================================================================
 var express = require('express');
 var mongoose = require('mongoose'); 					// mongoose for mongodb
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 8181;
 var database = require('./config/database');
 
 var deviare = express(); 			// create our app w/ express
