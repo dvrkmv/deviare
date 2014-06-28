@@ -1,3 +1,5 @@
+"use strict";
+
 // load the redirect model
 var Redirect = require('./models/redirect');
 var redirecter = require('./redirecter');
@@ -109,7 +111,7 @@ module.exports = function(app) {
 	app.delete('/api/redirects/:redir_url', function(req, res) {
 		Redirect.remove({
 			longUrl : req.params.redir_url
-		}, function(err, redirect) {
+		}, function(err, todo) {
 			if (err) {
 				res.send(err);
 			}
@@ -125,11 +127,6 @@ module.exports = function(app) {
 
 	// application -------------------------------------------------------------
 	app.get('/', function(req, res) {
-		res.statusCode = 302;
-		res.setHeader('Location', 'http://www.local-pc-guy');
-	});
-
-	app.get('/add', function(req, res) {
 		res.sendfile('../public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
 	});
 
