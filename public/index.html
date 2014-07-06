@@ -47,15 +47,15 @@
 			<!-- LOOP OVER THE Redirects IN $scope.redirects -->
 			<ul class="redirList">
 				<li class="row">
-					<strong class="listHeader col-sm-2 text-center">Delete Url</strong>
+					<strong class="listHeader col-sm-1 text-center">Delete Url</strong>
 					<strong class="col-sm-1 text-center">Url Views</strong>
-					<strong class="col-sm-3">Long Url</strong>
+					<strong class="col-sm-4">Long Url</strong>
 					<strong class="col-sm-3">Short Url</strong>
 				</li>
 				<li class="row" ng-repeat="redirect in redirects">
-					<span class="col-sm-2 text-center deleteUrl"><label class="clearfix"><input type="checkbox" ng-click="deleteRedirect(redirect._id)"></label></span>
+					<span class="col-sm-1 text-center deleteUrl"><label class="clearfix"><input type="checkbox" ng-click="deleteRedirect(redirect._id)"></label></span>
 					<span class="col-sm-1 text-center urlViews">{{ redirect.views }}</span>
-					<a href="{{ redirect.longUrl }}" target="_blank" class="col-sm-3 longUrl">
+					<a href="{{ redirect.longUrl }}" target="_blank" class="col-sm-4 longUrl">
 						{{ redirect.longUrl }}
 					</a>
 					<a href="http://lpg.io/{{ redirect.shortUrl }}" target="_blank" class="col-sm-3 shortUrl">
