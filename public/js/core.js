@@ -1,10 +1,11 @@
 var deviareApp = angular.module('deviareApp', []);
 
-deviareApp.controller('mainController', ['$scope', '$http', function($scope, $http) {
+deviareApp.controller('mainController', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
 	"use strict";
 	
 	$scope.redirectData = {};
 	$scope.redirects = {};
+	$scope.errorMsg = '';
 	
 	// Get redirects on page load
 	$http.get('api/redirects')
@@ -21,8 +22,15 @@ deviareApp.controller('mainController', ['$scope', '$http', function($scope, $ht
 		$http.post('/api/redirects', $scope.formData)
 			.success(function(data) {
 				$scope.formData = {}; // clear the form so our user is ready to enter another
-				$scope.redirects = data;
-				console.log(data);
+				console.log(data, data.err);
+				if (data.err !== null && typeof data.err !== 'undefined') {
+					$scope.errorMsg = data.err;
+					$timeout(function() {
+						$scope.errorMsg = '';
+					}, 3000);
+				} else {
+					$scope.redirects = data;
+				}
 			})
 			.error(function(data) {
 				console.log('Error: ' + data);

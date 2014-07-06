@@ -16,11 +16,11 @@ mongoose.connect(database.url); 	// connect to mongoDB database on modulus.io
 deviare.set('title', 'Deviare Url Shortener');
 deviare.use(express.static(__dirname + '/public')); 		// set the static files location /public/img will be /img for users
 // development only
-if ('development' == deviare.get('env')) {
+if ('development' === deviare.get('env')) {
 	deviare.use(logger({ format: 'dev', immediate: true })); 	// log every request to the console
 }
 // production only
-if ('production' == deviare.get('env')) {
+if ('production' === deviare.get('env')) {
 	deviare.use(logger({ immediate: true }));		 			// log every request to the console
 }
 deviare.use(bodyParser()); 						// pull information from html in POST

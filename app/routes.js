@@ -4,6 +4,7 @@
 var Redirect = require('./models/redirect');
 var redirecter = require('./redirecter');
 var redirLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+var errorStrings = require('./errorStrings');
 
 // expose the routes to our app with module.exports
 module.exports = function(app) {
@@ -43,22 +44,36 @@ module.exports = function(app) {
 			shortUrl = shortArr.join('');
 		}
 
-		Redirect.create({
-			longUrl : longUrl,
-			shortUrl : shortUrl,
-			views : 0
+		Redirect.findOne({ 
+			shortUrl : shortUrl 
 		}, function(err, redirect) {
+			// if there is an error retrieving, send the error. nothing after res.send(err) will execute
 			if (err) {
 				res.send(err);
 			}
-			// get and return all the redirects after you create another
-			Redirect.find(function(err, redirects) {
-				if (err) {
-					res.send(err);
-				}
-				res.json(redirects);
-			});
+			if (typeof redirect !== 'undefined' && redirect !== null) {
+				res.json({ err: errorStrings.dupShort });
+			} else {
+				Redirect.create({
+					longUrl : longUrl,
+					shortUrl : shortUrl,
+					views : 0
+				}, function(err) {
+					if (err) {
+						res.send(err);
+					}
+					// get and return all the redirects after you create another
+					Redirect.find(function(err, redirects) {
+						if (err) {
+							res.send(err);
+						}
+						res.json(redirects);
+					});
+				});
+			}
 		});
+
+		
 	});
 
 	// get a specific redirect by id
@@ -79,7 +94,7 @@ module.exports = function(app) {
 	app.get('/api/redirects/:redir_url', function(req, res) {
 		// use mongoose to get the matching redirect in the database
 		Redirect.findOne({ 
-			longUrl : req.params.redir_url 
+			shortUrl : req.params.redir_url 
 		}, function(err, redirect) {
 			// if there is an error retrieving, send the error. nothing after res.send(err) will execute
 			if (err) {
@@ -93,7 +108,7 @@ module.exports = function(app) {
 	app.delete('/api/redirects/:redir_id', function(req, res) {
 		Redirect.remove({
 			_id : req.params.redir_id
-		}, function(err, todo) {
+		}, function(err) {
 			if (err) {
 				res.send(err);
 			}
@@ -111,7 +126,7 @@ module.exports = function(app) {
 	app.delete('/api/redirects/:redir_url', function(req, res) {
 		Redirect.remove({
 			longUrl : req.params.redir_url
-		}, function(err, todo) {
+		}, function(err) {
 			if (err) {
 				res.send(err);
 			}
@@ -127,7 +142,7 @@ module.exports = function(app) {
 
 	// application -------------------------------------------------------------
 	app.get('/', function(req, res) {
-		res.sendfile('../public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+		res.sendfile('index.html', {'root' : 'public'}); // load the single view file (angular will handle the page changes on the front-end)
 	});
 
 	app.get('*', function(req, res) {
