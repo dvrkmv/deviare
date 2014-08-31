@@ -29,3 +29,10 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+
+# Private files that shouldn't be commited
+apivars.js
+
+# Project files
+*.sublime-project
+*.sublime-workspace

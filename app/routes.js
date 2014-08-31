@@ -5,9 +5,43 @@ var Redirect = require('./models/redirect');
 var redirecter = require('./redirecter');
 var redirLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 var errorStrings = require('./errorStrings');
+var apivars = require('./apivars');
+
+var passport = require('passport');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var TwitterStrategy = require('passport-twitter').Strategy;
+var ensureLoggedIn = require('../node_modules/connect-ensure-login/lib/ensureLoggedIn');
+//var ensureLoggedOut = require('../node_modules/connect-ensure-login/lib/ensureLoggedOut');
 
 // expose the routes to our app with module.exports
 module.exports = function(app) {
+
+	app.use(cookieParser());
+	app.use(session({ secret: 'keyboard cat', saveUninitialized: true, resave: true }));
+	app.use(passport.initialize());
+	app.use(passport.session());
+	 
+	passport.serializeUser(function(user, done) {
+		done(null, user);
+	});
+	 
+	passport.deserializeUser(function(obj, done) {
+		done(null, obj);
+	});
+	 
+	passport.use(new TwitterStrategy({
+			consumerKey: apivars.tw_consumerKey,
+			consumerSecret: apivars.tw_consumerSecret,
+			callbackURL: apivars.tw_callbackUrl
+		},
+		function(token, tokenSecret, profile, done) {
+			// NOTE: You'll probably want to associate the Twitter profile with a
+			//       user record in your application's DB.
+			var user = profile;
+			return done(null, user);
+		}
+	));
 
 	// api ---------------------------------------------------------------------
 	// get all redirects
@@ -72,8 +106,6 @@ module.exports = function(app) {
 				});
 			}
 		});
-
-		
 	});
 
 	// get a specific redirect by id
@@ -141,8 +173,23 @@ module.exports = function(app) {
 	});
 
 	// application -------------------------------------------------------------
-	app.get('/', function(req, res) {
-		res.sendfile('index.html', {'root' : 'public'}); // load the single view file (angular will handle the page changes on the front-end)
+	app.get('/login', function (req, res) {
+		res.sendfile('login.html', {'root' : 'public'}); // do authentication with traditional page loads
+	});
+	app.get('/logout', function(req, res) {
+		req.logout();
+		res.redirect('/');
+	});
+	app.get('/account', ensureLoggedIn('/login'), function (req, res) {
+		res.sendfile('account.html', {'root' : 'public'}); // show account information
+	});
+	app.get('/auth/twitter', passport.authenticate('twitter'));
+	app.get('/auth/twitter/callback', passport.authenticate('twitter', { 
+		successReturnToOrRedirect: '/', 
+		failureRedirect: '/login' 
+	}));
+ 	app.get('/', ensureLoggedIn('/login'), function(req, res) {
+		res.sendfile('home.html', {'root' : 'public'}); // load the single view file (angular will handle the page changes on the front-end)
 	});
 
 	app.get('*', function(req, res) {
