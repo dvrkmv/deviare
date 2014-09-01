@@ -7,13 +7,28 @@
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><!-- load bootstrap -->
 	<link rel="stylesheet" href="/css/main.css">
 </head>
-<body ng-controller="mainController">
+<body ng-controller="accountController">
 	<div class="container">
+		<a href="/" class="pull-left col-sm-1 menu-link">Home</a>
 		<div class="jumbotron text-center">
-			<h1>Account</h1>
-			<p>Put user account information here</p>
-			<a href="/logout" class="btn btn-primary btn-lg">Logout</a>
+			<div class="row">
+				<h1>Account</h1>
+			</div>
+			<div class="row">
+				<div class="col-sm-1 col-sm-offset-3 text-right">
+					<img ng-src="{{user.profileImage}}" alt="twitter avatar">
+				</div>
+				<div class="col-sm-2 text-left"><strong>User:</strong><br>{{user.displayName}}</div>
+				<div class="col-sm-2 text-left"><strong>Twitter:</strong><br>{{user.username}}</div>
+			</div>
+			<div class="row">
+				<a href="/logout" class="btn btn-primary btn-lg">Logout</a>
+			</div>
 		</div>
 	</div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+	<script src="/js/core.js"></script>
 </body>
 </html>

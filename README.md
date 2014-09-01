@@ -4,14 +4,8 @@ URL Shortener built using Node, Express, Mongo and Angular. Mainly as a learning
 
 ## Todo
 
-* √ Check if short URL exists before assigning it
-
-* Add basic authentication
-	* √ Twitter
-	* Store user in database
-	* Username/Password
-	* Associate shortened URLs with Twitter ID
-	* Update account page to show user information, allow user to update info
+* Add local authentication
+	* ? Using traditional Username/Password
 
 * Setup click count for tracking
 
@@ -20,6 +14,12 @@ URL Shortener built using Node, Express, Mongo and Angular. Mainly as a learning
 -----
 
 ## Change Log
+
+**08/31/14 - Update to authentication to associate admin with user properly**
+
+* Store user info in database
+* Associate shortened URLs with Twitter ID
+* Update account page to show user information
 
 **08/30/14 - Update to add basic authentication**
 

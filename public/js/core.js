@@ -15,7 +15,7 @@ deviareApp.controller('mainController', [
 		$http.get('api/redirects')
 			.success(function(data) {
 				$scope.redirects = data;
-				console.log(data);
+				//console.log(data);
 			})
 			.error(function(data) {
 				console.log('Error: ' + data);
@@ -23,7 +23,7 @@ deviareApp.controller('mainController', [
 
 		// submit redirect form data
 		$scope.createRedirect = function() {
-			$http.post('/api/redirects', $scope.formData)
+			$http.post('/api/redirect', $scope.formData)
 				.success(function(data) {
 					$scope.formData = {}; // clear the form so our user is ready to enter another
 					console.log(data, data.err);
@@ -43,14 +43,42 @@ deviareApp.controller('mainController', [
 
 		// delete a redirect after checking it
 		$scope.deleteRedirect = function(id) {
-			$http.delete('/api/redirects/' + id)
+			$http.delete('/api/redirect/' + id)
 				.success(function(data) {
-					$scope.redirects = data;
+					if (data.err !== null && typeof data.err !== 'undefined') {
+						$scope.errorMsg = data.err;
+						$timeout(function() {
+							$scope.errorMsg = '';
+						}, 3000);
+					} else {
+						$scope.redirects = data;
+					}
 					console.log(data);
 				})
 				.error(function(data) {
 					console.log('Error: ' + data);
 				});
 		};
+	}
+]);
+
+deviareApp.controller('accountController', [
+	'$scope',
+	'$http', 
+	function($scope, $http) {
+		'use strict';
+
+		// Make request for User information
+		$http.get('/api/account')
+			.success(function(data) {
+				console.log(data);
+
+				// set user information on scope
+				$scope.user = data;
+			})
+			.error(function(data) {
+				console.log(data);
+			}
+		);
 	}
 ]);
